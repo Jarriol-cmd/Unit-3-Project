@@ -1,18 +1,22 @@
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
+    
     public bool isGrounded;
     public LayerMask groundLayer;
     public LayerMask enemyLayer;
     Rigidbody2D RB;
     HelperScript helperScript;
+    public GameObject weapon;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         RB = GetComponent<Rigidbody2D>();
+        
     }
 
     // Update is called once per frame
@@ -48,21 +52,43 @@ public class PlayerScript : MonoBehaviour
             Destroy(gameObject);
         }
 
-        /*if (xvel > 0)
-        {
-            helperScript.DoFlipObject(true);
-        }
-
-        if (xvel < 0)
-        {
-            helperScript.DoFlipObject(false);
-        }
-
-        */
         RB.linearVelocity = new Vector3(xvel, yvel, 0);
 
         GroundCheck();
+
        
+        if (Input.GetKeyDown("t"))
+        {
+
+            if (xvel >= 0)
+            {
+                GameObject clone;
+                clone = Instantiate(weapon, transform.position, Quaternion.identity);
+
+                Rigidbody2D rb = clone.GetComponent<Rigidbody2D>();
+
+                rb.linearVelocity = new Vector2(15, 0);
+
+                rb.transform.position = new Vector3(transform.position.x + 0.75f, transform.position.y, transform.position.z);
+
+                rb.transform.Rotate(new Vector3(0, 0, 315));
+            }
+            
+            if (xvel <= 0)
+            {
+                GameObject clone;
+                clone = Instantiate(weapon, transform.position, Quaternion.identity);
+
+                Rigidbody2D rb = clone.GetComponent<Rigidbody2D>();
+
+                rb.linearVelocity = new Vector2(-15, 0);
+
+                rb.transform.position = new Vector3(transform.position.x - 0.75f, transform.position.y, transform.position.z);
+
+                rb.transform.Rotate(new Vector3(0, 0, 135));
+            }
+        }
+
     }
 
     void GroundCheck()
