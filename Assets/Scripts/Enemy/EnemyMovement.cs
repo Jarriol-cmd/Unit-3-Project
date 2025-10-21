@@ -4,11 +4,12 @@ public class NewMonoBehaviourScript : MonoBehaviour
 {
 
     Rigidbody2D rb;
+    float timer;
     bool isGrounded;
     public bool isFacingRight;
     public LayerMask groundLayer;
     public LayerMask playerLayer;
-
+    public GameObject weapon;
     float xvel, yvel;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -17,13 +18,14 @@ public class NewMonoBehaviourScript : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         xvel = 6;
         yvel = 0;
+        timer = 4;
     }
 
     // Update is called once per frame
     void Update()
     {
         yvel = rb.linearVelocity.y;
-
+        timer -= Time.deltaTime;
 
         if (xvel < 0)
         {
@@ -51,8 +53,41 @@ public class NewMonoBehaviourScript : MonoBehaviour
             Destroy(gameObject);
         }
 
+        if (timer <= 0)
+        {
 
-            rb.linearVelocity = new Vector3(xvel, yvel, 0);
+            if (xvel >= 0)
+            {
+                GameObject clone;
+                clone = Instantiate(weapon, transform.position, Quaternion.identity);
+
+                Rigidbody2D rb = clone.GetComponent<Rigidbody2D>();
+
+                rb.linearVelocity = new Vector2(15, 0);
+
+                rb.transform.position = new Vector3(transform.position.x + 1.5f, transform.position.y, transform.position.z);
+
+                rb.transform.Rotate(new Vector3(0, 0, 315));
+            }
+
+            if (xvel <= 0)
+            {
+                GameObject clone;
+                clone = Instantiate(weapon, transform.position, Quaternion.identity);
+
+                Rigidbody2D rb = clone.GetComponent<Rigidbody2D>();
+
+                rb.linearVelocity = new Vector2(-15, 0);
+
+                rb.transform.position = new Vector3(transform.position.x - 1.5f, transform.position.y, transform.position.z);
+
+                rb.transform.Rotate(new Vector3(0, 0, 135));
+            }
+            timer = 4;
+        }
+
+
+        rb.linearVelocity = new Vector3(xvel, yvel, 0);
     }
 
 

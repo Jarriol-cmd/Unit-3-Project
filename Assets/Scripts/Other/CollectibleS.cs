@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 
 public class CollectibleS : MonoBehaviour
 {
-
+    
     public float rotationsPerMinute = 10f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -20,7 +20,10 @@ public class CollectibleS : MonoBehaviour
 
     private void OnTriggerEnter2D(UnityEngine.Collider2D collision)
     {
-        Destroy(gameObject);
+        if (collision.gameObject.tag == "Player")
+        {
+            Destroy(gameObject);
+        }
     }
 
 

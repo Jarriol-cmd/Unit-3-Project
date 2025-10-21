@@ -11,17 +11,24 @@ public class PlayerScript : MonoBehaviour
     Rigidbody2D RB;
     HelperScript helperScript;
     public GameObject weapon;
+    public Animator anim;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         RB = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        helperScript = gameObject.AddComponent<HelperScript>();
         
     }
 
     // Update is called once per frame
     void Update()
     {
+        anim.SetBool("walking", false);
+        anim.SetBool("jumping", false);
+        anim.SetBool("attacking", false);
+
         float xvel = RB.linearVelocity.x;
         float yvel = RB.linearVelocity.y;
 
@@ -29,16 +36,27 @@ public class PlayerScript : MonoBehaviour
         if(Input.GetKey("d"))
         {
             xvel = 4;
+            anim.SetBool("walking", true);
+            helperScript.DoFlipObject(false);
         }
 
         if (Input.GetKey("a"))
         {
             xvel = -4;
+            anim.SetBool("walking", true);
+            helperScript.DoFlipObject(true);
         }
+
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true)
         {
             yvel = 8;
+            anim.SetBool("jumping", true);
+        }
+
+        if(isGrounded == false)
+        {
+            anim.SetBool("jumping", true);
         }
 
         if (Input.GetKeyDown("s"))
@@ -59,6 +77,7 @@ public class PlayerScript : MonoBehaviour
        
         if (Input.GetKeyDown("t"))
         {
+            anim.SetBool("attacking", true);
 
             if (xvel >= 0)
             {
@@ -96,7 +115,7 @@ public class PlayerScript : MonoBehaviour
 
         Vector2 position = transform.position;
         Vector2 direction = Vector2.down;
-        float distance = 1.0f;
+        float distance = 2.0f;
         Debug.DrawRay(position, direction, Color.black);
         RaycastHit2D hit = Physics2D.Raycast(position, direction, distance, groundLayer);
         if (hit.collider != null)
