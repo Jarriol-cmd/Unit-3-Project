@@ -53,7 +53,7 @@ public class NewMonoBehaviourScript : MonoBehaviour
             }
         }
 
-        if (ExtendedplayerCollisionCheck(0, 2) == true)
+        if (ExtendedplayerCollisionCheck(0, 2) == true || ExtendedplayerCollisionCheck(0, 1) == true)
         {
             Destroy(gameObject);
         }
