@@ -11,6 +11,7 @@ public class NewMonoBehaviourScript : MonoBehaviour
     public LayerMask playerLayer;
     public GameObject weapon;
     float xvel, yvel;
+    public Animator anim;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -19,11 +20,15 @@ public class NewMonoBehaviourScript : MonoBehaviour
         xvel = 6;
         yvel = 0;
         timer = 4;
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        anim.SetBool("walking", false);
+        anim.SetBool("attacking", false);
+
         yvel = rb.linearVelocity.y;
         timer -= Time.deltaTime;
 
@@ -33,7 +38,7 @@ public class NewMonoBehaviourScript : MonoBehaviour
             {
                 Flip();
                 xvel = -xvel;
-
+                anim.SetBool("walking", true);
             }
         }
 
@@ -44,11 +49,11 @@ public class NewMonoBehaviourScript : MonoBehaviour
             {
                 Flip();
                 xvel = -xvel;
-
+                anim.SetBool("walking", true);
             }
         }
 
-        if (ExtendedplayerCollisionCheck(0, 1) == true)
+        if (ExtendedplayerCollisionCheck(0, 2) == true)
         {
             Destroy(gameObject);
         }
@@ -83,6 +88,7 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
                 rb.transform.Rotate(new Vector3(0, 0, 135));
             }
+            anim.SetBool("attacking", true);
             timer = 4;
         }
 
@@ -102,7 +108,7 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
     public bool ExtendedRayCollisionCheck(float xoffs, float yoffs)
     {
-        float rayLength = 2.5f;
+        float rayLength = 2f;
         bool hitSomething = false;
 
         Vector3 offset = new Vector3(xoffs, yoffs, 0);
