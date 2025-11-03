@@ -12,6 +12,7 @@ public class PlayerScript : MonoBehaviour
     HelperScript helperScript;
     public GameObject weapon;
     public Animator anim;
+    public Transform respawnPoint;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -28,6 +29,7 @@ public class PlayerScript : MonoBehaviour
         anim.SetBool("walking", false);
         anim.SetBool("jumping", false);
         anim.SetBool("attacking", false);
+        anim.SetBool("Dying", false);
 
         float xvel = RB.linearVelocity.x;
         float yvel = RB.linearVelocity.y;
@@ -67,7 +69,8 @@ public class PlayerScript : MonoBehaviour
 
         if (ExtendedenemyCollisionCheck(-0.5f, 0.5f) == true || ExtendedenemyCollisionCheck(0.5f,0.5f) == true)
         {
-            Destroy(gameObject);
+            
+            respawnPlayer();
         }
 
         RB.linearVelocity = new Vector3(xvel, yvel, 0);
@@ -154,5 +157,11 @@ public class PlayerScript : MonoBehaviour
         Debug.DrawRay(transform.position + offset, -Vector3.up * rayLength, hitColor);
 
         return hitSomething;
+    }
+
+    void respawnPlayer()
+    {
+        transform.position = respawnPoint.position;
+        anim.SetBool("Dying", true);
     }
 }

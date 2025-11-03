@@ -12,6 +12,7 @@ public class NewMonoBehaviourScript : MonoBehaviour
     public GameObject weapon;
     float xvel, yvel;
     public Animator anim;
+    public float Dtimer;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,6 +22,8 @@ public class NewMonoBehaviourScript : MonoBehaviour
         yvel = 0;
         timer = 4;
         anim = GetComponent<Animator>();
+        Dtimer = 2;
+
     }
 
     // Update is called once per frame
@@ -28,6 +31,7 @@ public class NewMonoBehaviourScript : MonoBehaviour
     {
         anim.SetBool("walking", false);
         anim.SetBool("attacking", false);
+        anim.SetBool("Dying", false);
 
         yvel = rb.linearVelocity.y;
         timer -= Time.deltaTime;
@@ -55,7 +59,19 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
         if (ExtendedplayerCollisionCheck(0, 2) == true || ExtendedplayerCollisionCheck(0, 1) == true)
         {
-            Destroy(gameObject);
+            xvel = 0;
+
+        }
+
+        if (xvel == 0)
+        {
+            Dtimer -= Time.deltaTime;
+            anim.SetBool("Dying", true);
+
+            if (Dtimer <= 0)
+            {
+                Destroy(gameObject);
+            }
         }
 
         if (timer <= 0)
