@@ -1,3 +1,6 @@
+using Mono.Collections.Generic;
+using System.Collections.ObjectModel;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -13,6 +16,12 @@ public class PlayerScript : MonoBehaviour
     public GameObject weapon;
     public Animator anim;
     public Transform respawnPoint;
+    public TextMeshProUGUI menu;
+    public int collection = 0;
+    public int bsecret = 0;
+    public int bulletsfired = 0;
+    public int deathcount= 0;
+    public bool isFacingRight;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -20,7 +29,7 @@ public class PlayerScript : MonoBehaviour
         RB = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         helperScript = gameObject.AddComponent<HelperScript>();
-        
+        isFacingRight = true;
     }
 
     // Update is called once per frame
@@ -33,13 +42,16 @@ public class PlayerScript : MonoBehaviour
 
         float xvel = RB.linearVelocity.x;
         float yvel = RB.linearVelocity.y;
+        
 
+        menu.text = "Collectables collected: " + collection + ", " + bsecret + " bonuses." + "\ndeaths: " + deathcount + "\nbullets fired: " + bulletsfired;
 
         if(Input.GetKey("d"))
         {
             xvel = 4;
             anim.SetBool("walking", true);
             helperScript.DoFlipObject(false);
+            isFacingRight = true;
         }
 
         if (Input.GetKey("a"))
@@ -47,6 +59,7 @@ public class PlayerScript : MonoBehaviour
             xvel = -4;
             anim.SetBool("walking", true);
             helperScript.DoFlipObject(true);
+            isFacingRight = false;
         }
 
 
@@ -70,7 +83,8 @@ public class PlayerScript : MonoBehaviour
         if (ExtendedenemyCollisionCheck(-0.5f, 0.5f) == true || ExtendedenemyCollisionCheck(0.5f,0.5f) == true)
         {
             
-            respawnPlayer();
+            RespawnPlayer();
+            deathcount += 1;
         }
 
         RB.linearVelocity = new Vector3(xvel, yvel, 0);
@@ -81,8 +95,9 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKeyDown("t"))
         {
             anim.SetBool("attacking", true);
+            bulletsfired += 1;
 
-            if (xvel >= 0)
+            if (isFacingRight == true)
             {
                 GameObject clone;
                 clone = Instantiate(weapon, transform.position, Quaternion.identity);
@@ -95,8 +110,8 @@ public class PlayerScript : MonoBehaviour
 
                 rb.transform.Rotate(new Vector3(0, 0, 315));
             }
-            
-            if (xvel <= 0)
+
+            if (isFacingRight == false)
             {
                 GameObject clone;
                 clone = Instantiate(weapon, transform.position, Quaternion.identity);
@@ -159,9 +174,22 @@ public class PlayerScript : MonoBehaviour
         return hitSomething;
     }
 
-    void respawnPlayer()
+    void RespawnPlayer()
     {
         transform.position = respawnPoint.position;
         anim.SetBool("Dying", true);
+    }
+
+    public void OnTriggerEnter2D(UnityEngine.Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Collectable")
+        {
+            collection += 1;
+        }
+
+        if (collision.gameObject.tag == "Secret")
+        {
+            bsecret += 1;
+        }
     }
 }

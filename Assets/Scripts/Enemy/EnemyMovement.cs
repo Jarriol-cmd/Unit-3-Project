@@ -18,7 +18,7 @@ public class NewMonoBehaviourScript : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        xvel = 6;
+        xvel = 4;
         yvel = 0;
         timer = 4;
         anim = GetComponent<Animator>();
@@ -74,38 +74,42 @@ public class NewMonoBehaviourScript : MonoBehaviour
             }
         }
 
-        if (timer <= 0)
+        if (xvel != 0)
         {
 
-            if (xvel >= 0)
+            if (timer <= 0)
             {
-                GameObject clone;
-                clone = Instantiate(weapon, transform.position, Quaternion.identity);
 
-                Rigidbody2D rb = clone.GetComponent<Rigidbody2D>();
+                if (xvel >= 0)
+                {
+                    GameObject clone;
+                    clone = Instantiate(weapon, transform.position, Quaternion.identity);
 
-                rb.linearVelocity = new Vector2(15, 0);
+                    Rigidbody2D rb = clone.GetComponent<Rigidbody2D>();
 
-                rb.transform.position = new Vector3(transform.position.x + 1.5f, transform.position.y, transform.position.z);
+                    rb.linearVelocity = new Vector2(15, 0);
 
-                rb.transform.Rotate(new Vector3(0, 0, 315));
+                    rb.transform.position = new Vector3(transform.position.x + 1.5f, transform.position.y, transform.position.z);
+
+                    rb.transform.Rotate(new Vector3(0, 0, 315));
+                }
+
+                if (xvel <= 0)
+                {
+                    GameObject clone;
+                    clone = Instantiate(weapon, transform.position, Quaternion.identity);
+
+                    Rigidbody2D rb = clone.GetComponent<Rigidbody2D>();
+
+                    rb.linearVelocity = new Vector2(-15, 0);
+
+                    rb.transform.position = new Vector3(transform.position.x - 1.5f, transform.position.y, transform.position.z);
+
+                    rb.transform.Rotate(new Vector3(0, 0, 135));
+                }
+                anim.SetBool("attacking", true);
+                timer = 4;
             }
-
-            if (xvel <= 0)
-            {
-                GameObject clone;
-                clone = Instantiate(weapon, transform.position, Quaternion.identity);
-
-                Rigidbody2D rb = clone.GetComponent<Rigidbody2D>();
-
-                rb.linearVelocity = new Vector2(-15, 0);
-
-                rb.transform.position = new Vector3(transform.position.x - 1.5f, transform.position.y, transform.position.z);
-
-                rb.transform.Rotate(new Vector3(0, 0, 135));
-            }
-            anim.SetBool("attacking", true);
-            timer = 4;
         }
 
 

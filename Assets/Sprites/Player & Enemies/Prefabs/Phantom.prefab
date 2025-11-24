@@ -121,7 +121,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &5900549524697613420
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -211,7 +211,7 @@ MonoBehaviour:
     m_Bits: 384
   weapon: {fileID: 3180032821534044321, guid: 8dbe298d764c9c24bba9e4f1c84ab196, type: 3}
   anim: {fileID: 0}
-  SpawnPoint: {x: -7, y: 0, z: 0}
+  Dtimer: 0
 --- !u!1 &6631002245841074115
 GameObject:
   m_ObjectHideFlags: 0
